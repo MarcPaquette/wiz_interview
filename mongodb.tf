@@ -11,6 +11,7 @@ resource "google_compute_firewall" "ssh-mongo" {
     ports = ["22","443","80"]
   }
   target_tags = ["mongodb"]
+  source_ranges = ["0.0.0.0/0"]
 }
 
 resource "google_compute_instance" "mongo_node" {
