@@ -17,6 +17,23 @@ sudo apt-get install -y mongodb-org
 
 
 # Ensure MongoDB uses authentication so you can construct a MongoDB connection string.
+mongodb mongo://localhost:27017 <<EOF
+use admin
+db.createUser(
+  {
+    user: "mongodb",
+    pwd: "thisisinsecure",
+    roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+  }
+)
+EOF
+
+security_config="
+security:
+    authorization: disabled
+"
+
+sudo echo $security_config >> /etc/mongod.conf
 
 
 # MongoDB Backups: Create a Script which regularly backups the MongoDB databases 
