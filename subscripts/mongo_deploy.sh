@@ -15,9 +15,13 @@ echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-5.0.gp
 sudo apt-get update
 sudo apt-get install -y mongodb-org
 
+# Enable mongodb service and run it
+sudo systemctl enable mongod
+sudo systemctl daemon-reload
+sudo systemctl start mongod
 
 # Ensure MongoDB uses authentication so you can construct a MongoDB connection string.
-mongodb mongo://localhost:27017 <<EOF
+mongo mongodb://localhost:27017 <<EOF
 use admin
 db.createUser(
   {
@@ -28,21 +32,21 @@ db.createUser(
 )
 EOF
 
+# Update mongod.conf to enable authorization
 security_config="
 security:
     authorization: disabled
 "
 
-sudo echo $security_config >> /etc/mongod.conf
+cat $security_config | tee /etc/mongod.conf
 
+
+# Reload the config
+sudo systemctl daemon-reload
+sudo systemctl restart mongod
 
 # MongoDB Backups: Create a Script which regularly backups the MongoDB databases 
 # and transfers them to the created bucket.
  
-
-# Enable mongodb service and run it
-sudo systemctl enable mongod
-sudo systemctl daemon-reload
-sudo systemctl start mongod
 
 
