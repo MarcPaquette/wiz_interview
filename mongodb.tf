@@ -1,12 +1,23 @@
-// Creation of the 3 Compute Engine instances for the mongodb cluster.
-// The first one will me the leader (where the cluster will be initialized from).
-// The 2 other will start as secondary nodes
-// Instances will be provisionned on 3 different zones for resiliency purpose.
+resource "google_service_account" "default" {
+  account_id   = "mongodb-sa"
+  display_name = "MongoDB Service Account"
+}
+
+resource "google_compute_firewall" "ssh-mongo" {
+  name = "mongo-ssh"
+  network    = google_compute_network.vpc.name
+  allow {
+    protocol = "tcp"
+    ports = ["22","443","80"]
+  }
+  target_tags = ["mongodb"]
+}
+
 resource "google_compute_instance" "mongo_node" {
   name         = "mongodb"
   description  = "mongodb vm"
 
-  machine_type = "f1-micro"
+  machine_type = "e2-standard-2"
   zone         = "us-central1-a"
 
   boot_disk {
@@ -20,5 +31,14 @@ resource "google_compute_instance" "mongo_node" {
   network_interface {
     network    = google_compute_network.vpc.name
     subnetwork = google_compute_subnetwork.subnet.name
+  }
+
+  tags=  ["mongodb"]
+
+// Highly Privileged MongoDB VM: Configure the VM in a way that it is granted Admin
+// CSP permissions.
+ service_account {
+    email  = google_service_account.default.email
+    scopes = ["cloud-platform"]
   }
 }
