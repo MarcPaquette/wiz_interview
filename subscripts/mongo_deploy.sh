@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -xe
 
+MONGO_DB_NAME="admin"
 
 # Prerequisits
 sudo apt-get install gnupg curl
@@ -20,6 +21,8 @@ sudo systemctl enable mongod
 sudo systemctl daemon-reload
 sudo systemctl start mongod
 
+sleep 30 # Wait for MongoDB to start before proceeding
+
 # Ensure MongoDB uses authentication so you can construct a MongoDB connection string.
 mongo mongodb://localhost:27017 <<EOF
 use admin
@@ -27,7 +30,7 @@ db.createUser(
   {
     user: "mongodb",
     pwd: "thisisinsecure",
-    roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+    roles: [ { role: "userAdminAnyDatabase", db: "$MONGO_DB_NAME" } ]
   }
 )
 EOF
@@ -45,8 +48,9 @@ echo "$security_config" | sudo tee -a /etc/mongod.conf
 sudo systemctl daemon-reload
 sudo systemctl restart mongod
 
-# MongoDB Backups: Create a Script which regularly backups the MongoDB databases 
+# MongoDB Backups: Create a Script which regularly backups the MongoDB
 # and transfers them to the created bucket.
+ sudo mkdir -p /var/backups/mongobackups
  
-
-
+ # Backup every 15 minutes
+ (crontab -l 2>/dev/null; echo "*/10 * * * * mongodump --db $MONGO_DB_NAME --out /var/backups/mongobackups/$(date +'%m-%d-%y')") | sudo crontab -
