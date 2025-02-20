@@ -57,9 +57,13 @@ sudo systemctl restart mongod
 # and transfers them to the created bucket.
 sudo mkdir -p "$MONGO_DB_BACKUP_DIRECTORY"
  
- # Backup every 10 minutes
+# Backup every 10 minutes
 sudo systemctl enable cron
 sudo crontab -l 2> /dev/null || true #this is hack to prime crontab for first use
 echo "*/10 * * * * mongodump --db $MONGO_DB_NAME -u $MONGO_DB_USER -p $MONGO_DB_PASSWORD --authenticationDatabase $MONGO_DB_NAME --out $MONGO_DB_BACKUP_DIRECTORY/\$(date +\%s)/" | sudo crontab -
+
+# Package and Ship backups every 10 min
+(sudo crontab -l ; echo "*/10 0 * * * gcloud storage cp /var/backups/mongodb/* gs://mongodb-backups-s3 --recursive") | sudo crontab -
+
 
 echo "We good!"

@@ -1,4 +1,4 @@
-resource "google_service_account" "default" {
+resource "google_service_account" "mongo-user" {
   account_id   = "mongodb-sa"
   display_name = "MongoDB Service Account"
 }
@@ -39,7 +39,7 @@ resource "google_compute_instance" "mongo_node" {
 // Highly Privileged MongoDB VM: Configure the VM in a way that it is granted Admin
 // CSP permissions.
  service_account {
-    email  = google_service_account.default.email
+    email  = google_service_account.mongo-user.email
     scopes = ["cloud-platform"]
   }
 }
