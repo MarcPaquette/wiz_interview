@@ -50,7 +50,7 @@ sudo systemctl restart mongod
 
 # MongoDB Backups: Create a Script which regularly backups the MongoDB
 # and transfers them to the created bucket.
- sudo mkdir -p /var/backups/mongobackups
+sudo mkdir -p /var/backups/mongobackups
  
  # Backup every 15 minutes
- (crontab -l 2>/dev/null; echo "*/10 * * * * mongodump --db $MONGO_DB_NAME --out /var/backups/mongobackups/$(date +'%m-%d-%y')") | sudo crontab -
+(crontab -l 2>/dev/null; echo "*/10 * * * * mongodump --db $MONGO_DB_NAME --out /var/backups/mongobackups/$(date +'%m-%d-%y')") | sudo crontab -
