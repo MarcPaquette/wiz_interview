@@ -4,6 +4,7 @@ set -xe
 MONGO_DB_NAME="admin"
 MONGO_DB_USER="mongodb"
 MONGO_DB_PASSWORD="thisisinsecure"
+MONGO_DB_BACKUP_DIRECTORY="/var/backups/mongodb"
 
 # Prerequisits
 sudo apt-get install gnupg curl
@@ -54,7 +55,10 @@ sudo systemctl restart mongod
 
 # MongoDB Backups: Create a Script which regularly backups the MongoDB
 # and transfers them to the created bucket.
-sudo mkdir -p /var/backups/mongobackups
+sudo mkdir -p "$MONGO_DB_BACKUP_DIRECTORY"
  
- # Backup every 15 minutes
-(sudo crontab -l 2>/dev/null; echo "*/10 * * * * mongodump --db $MONGO_DB_NAME -u $MONGO_DB_USER -p $MONGO_DB_PASSWORD --authenticationDatabase $MONGO_DB_NAME --out /var/backups/mongobackups/\$\(date +'%m-%d-%y'\)") | sudo crontab -
+ # Backup every 10 minutes
+sudo systemctl enable cron
+sudo crontab -l 2> dev/null #this is hack to prime crontab for first use
+echo "*/10 * * * * mongodump --db $MONGO_DB_NAME -u $MONGO_DB_USER -p $MONGO_DB_PASSWORD --authenticationDatabase $MONGO_DB_NAME --out $MONGO_DB_BACKUP_DIRECTORY/\$(date +%s)" | sudo crontab -
+echo "We good!"
