@@ -57,4 +57,4 @@ sudo systemctl restart mongod
 sudo mkdir -p /var/backups/mongobackups
  
  # Backup every 15 minutes
-(sudo crontab -l 2>/dev/null; echo "*/10 * * * * mongodump --db $MONGO_DB_NAME --out /var/backups/mongobackups/\$\(date +'%m-%d-%y'\)") | sudo crontab -
+(sudo crontab -l 2>/dev/null; echo "*/10 * * * * mongodump --db $MONGO_DB_NAME -u $MONGO_DB_USER -p $MONGO_DB_PASSWORD --authenticationDatabase $MONGO_DB_NAME --out /var/backups/mongobackups/\$\(date +'%m-%d-%y'\)") | sudo crontab -
