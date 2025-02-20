@@ -35,10 +35,10 @@ EOF
 # Update mongod.conf to enable authorization
 security_config="
 security:
-    authorization: disabled
+    authorization: enabled
 "
 
-cat $security_config | tee /etc/mongod.conf
+echo "$security_config" | sudo tee -a /etc/mongod.conf
 
 
 # Reload the config
