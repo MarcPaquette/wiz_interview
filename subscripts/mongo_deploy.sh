@@ -60,5 +60,6 @@ sudo mkdir -p "$MONGO_DB_BACKUP_DIRECTORY"
  # Backup every 10 minutes
 sudo systemctl enable cron
 sudo crontab -l 2> /dev/null || true #this is hack to prime crontab for first use
-echo "*/10 * * * * mongodump --db $MONGO_DB_NAME -u $MONGO_DB_USER -p $MONGO_DB_PASSWORD --authenticationDatabase $MONGO_DB_NAME --out $MONGO_DB_BACKUP_DIRECTORY/\$(date +%s)" | sudo crontab -
+echo "*/10 * * * * mongodump --db $MONGO_DB_NAME -u $MONGO_DB_USER -p $MONGO_DB_PASSWORD --authenticationDatabase $MONGO_DB_NAME --out $MONGO_DB_BACKUP_DIRECTORY/\$(date +\%s)/" | sudo crontab -
+
 echo "We good!"
