@@ -63,7 +63,7 @@ sudo crontab -l 2> /dev/null || true #this is hack to prime crontab for first us
 echo "*/10 * * * * mongodump --db $MONGO_DB_NAME -u $MONGO_DB_USER -p $MONGO_DB_PASSWORD --authenticationDatabase $MONGO_DB_NAME --out $MONGO_DB_BACKUP_DIRECTORY/\$(date +\%s)/" | sudo crontab -
 
 # Package and Ship backups every 10 min
-(sudo crontab -l ; echo "*/10 0 * * * gcloud storage cp /var/backups/mongodb/* gs://mongodb-backups-s3 --recursive") | sudo crontab -
+(sudo crontab -l ; echo "*/10 * * * * gcloud storage cp /var/backups/mongodb/* gs://mongodb-backups-s3 --recursive") | sudo crontab -
 
 
 echo "We good!"
