@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -xe
 
-MONGO_DB_NAME="admin"
+MONGO_DB_NAME="go-mongodb"
 MONGO_DB_USER="mongodb"
 MONGO_DB_PASSWORD="thisisinsecure"
 MONGO_DB_BACKUP_DIRECTORY="/var/backups/mongodb"
@@ -28,7 +28,7 @@ sleep 30 # Wait for MongoDB to start before proceeding
 
 # Ensure MongoDB uses authentication so you can construct a MongoDB connection string.
 mongosh mongodb://localhost:27017 <<EOF
-use admin
+use $MONGO_DB_NAME
 db.createUser(
   {
     user: "$MONGO_DB_USER",

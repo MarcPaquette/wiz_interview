@@ -14,7 +14,7 @@ resource "google_storage_bucket_iam_member" "mongo_backup_storage_member" {
 
 resource "google_storage_bucket" "mongo-db-backups-s3-mpp" {
   name = "mongodb-backups-s3"
-  location      = "US"
+  location      = var.region
   force_destroy = true
   website {
     main_page_suffix = "index.html"
