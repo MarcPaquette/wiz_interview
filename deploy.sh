@@ -4,9 +4,10 @@ set -xe
 # Preflight checks
 terraform init
 terraform validate
+terraform plan
 
 # Deploy Mongo VM & network
-terraform apply \
+terraform apply -auto-approve \
     -target=google_service_account.mongo-user \
     -target=google_compute_firewall.ssh-mongo \
     -target=google_compute_instance.mongo_node \
@@ -20,7 +21,9 @@ sleep 20 #give VM time to start
 ./install_mongo.sh
 
 # Deploy GCP Artifact storage
-terraform apply -target=google_artifact_registry_repository.containers
+terraform apply -auto-approve \
+    -target=google_artifact_registry_repository.containers \
+    -target=google_artifact_registry_reposistory_iam_member.gke_pull_access
 
 # Deploy Docker Image
 ./upload_container.sh

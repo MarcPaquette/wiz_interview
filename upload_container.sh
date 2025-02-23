@@ -1,13 +1,24 @@
 #!/usr/bin/env bash
 set -xe
 
+export IMAGE_URL=us-central1-docker.pkg.dev/wizthreetier/wizzardcloset/tasky:v1
+
 git clone git@github.com:jeffthorne/tasky.git
 pushd tasky
 go mod tidy
 go mod vendor 
+echo "Marc was here. SH0u+z 2 h4ck3r cr3wz! l33t pwnd." > wizexercise.txt
 docker build -t tasky .
-docker tag tasky us-central1-docker.pkg.dev/wizthreetier/wizzardcloset/tasky:v1
+docker tag tasky $IMAGE_URL
+
+
+docker create --name temp_container $IMAGE_URL
+docker cp /tmp/wizexercise.txt temp_container:/app/assets/wizexercise.txt
+docker commit temp_container $IMAGE_URL
+docker push $IMAGE_URL
+
+
 gcloud auth configure-docker us-central1-docker.pkg.dev
-docker push us-central1-docker.pkg.dev/wizthreetier/wizzardcloset/tasky:v1
+docker push $IMAGE_URL
 popd
 rm -rf tasky

@@ -32,8 +32,8 @@ resource "kubernetes_deployment_v1" "default" {
 
       spec {
         container {
-          image = "us-central1-docker.pkg.dev/wizthreetier/wizzardcloset/tasky"
-          name  = "tasky-app-container"
+          image = "us-central1-docker.pkg.dev/wizthreetier/wizzardcloset/tasky:v1"
+          name  = "tasky"
 
           env {
             name = "MONGODB_URI"
@@ -56,7 +56,7 @@ resource "kubernetes_deployment_v1" "default" {
           }
 
           port {
-            container_port = 80
+            container_port = 8080
             name           = "tasky-app-svc"
           }
 
