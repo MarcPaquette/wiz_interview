@@ -32,7 +32,7 @@ resource "kubernetes_deployment_v1" "default" {
 
       spec {
         container {
-          image = "us-central1-docker.pkg.dev/wizthreetier/wizzardcloset/tasky:v1"
+          image = "us-central1-docker.pkg.dev/clgcporg10-154/wizzardcloset/tasky:v1"
           name  = "tasky"
 
           env {
