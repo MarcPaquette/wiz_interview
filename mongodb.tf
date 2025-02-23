@@ -8,9 +8,8 @@ resource "google_compute_firewall" "ssh-mongo" {
   network    = google_compute_network.vpc.name
   allow {
     protocol = "tcp"
-    ports = ["22","443","80"]
+    ports = ["27017","22","443","80"]
   }
-  target_tags = ["mongodb"]
   source_ranges = ["0.0.0.0/0"]
 }
 

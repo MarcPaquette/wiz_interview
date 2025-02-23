@@ -10,7 +10,7 @@ git clone git@github.com:jeffthorne/tasky.git
 pushd tasky
 # go mod tidy
 # go mod vendor 
-echo "Marc was here. SH0u+z 2 h4ck3r cr3wz! l33t pwnd." > wizexercise.txt
+echo "Marc was here. SH0u+z 2 h4ck3r cr3wz! l33t pwnd." > /tmp/wizexercise.txt
 docker build -t tasky .
 docker tag tasky $IMAGE_URL
 

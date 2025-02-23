@@ -13,7 +13,7 @@ resource "google_storage_bucket_iam_member" "mongo_backup_storage_member" {
 }
 
 resource "google_storage_bucket" "mongo-db-backups-s3-mpp" {
-  name = "mongodb-backups-s3"
+  name = "mongodb-backups-s3-mpp-not-taken-heliotrope"
   location      = var.region
   force_destroy = true
   website {
