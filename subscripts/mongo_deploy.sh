@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -xe
 
-MONGO_DB_NAME="go-mongodb"
+MONGO_DB_NAME="admin"
 MONGO_DB_USER="mongodb"
 MONGO_DB_PASSWORD="thisisinsecure"
 MONGO_DB_BACKUP_DIRECTORY="/var/backups/mongodb"
@@ -48,6 +48,7 @@ security:
 
 echo "$security_config" | sudo tee -a /etc/mongod.conf
 
+sudo sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf
 
 # Reload the config
 sudo systemctl daemon-reload
@@ -59,8 +60,7 @@ sudo mkdir -p "$MONGO_DB_BACKUP_DIRECTORY"
  
 # Backup every 10 minutes
 sudo systemctl enable cron
-sudo crontab -l 2> /dev/null || true #this is hack to prime crontab for first use
-#echo "*/10 * * * * mongodump --db $MONGO_DB_NAME -u $MONGO_DB_USER -p $MONGO_DB_PASSWORD --authenticationDatabase $MONGO_DB_NAME --out $MONGO_DB_BACKUP_DIRECTORY/\$(date +\%s)/" | sudo crontab -
+sudo crontab -l 2> /dev/null || true # this is hack to prime crontab for first use
 
 # Package and Ship backups every 10 min
 #(sudo crontab -l ; echo "*/10 * * * * /snap/bin/gcloud storage cp /var/backups/mongodb/* gs://mongodb-backups-s3 --recursive") | sudo crontab -

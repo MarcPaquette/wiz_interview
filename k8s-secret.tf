@@ -4,7 +4,7 @@ resource "kubernetes_secret" "tasky-secret" {
   }
 
   data = {
-    MONGODB_URI	 = "mongodb://admin:thisisinsecure@mongodb:27017"
+    MONGODB_URI	 = "mongodb://mongodb:thisisinsecure@mongodb:27017"
     SECRET_KEY = "secret123"
   }
 }

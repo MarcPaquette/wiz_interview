@@ -136,3 +136,38 @@ resource "time_sleep" "wait_service_cleanup" {
 
   destroy_duration = "180s"
 }
+
+
+resource "kubernetes_network_policy_v1" "tasky-egress" {
+  metadata {
+    name      = "tasky-network-policy"
+    namespace = "default"
+  }
+
+  spec {
+    pod_selector {
+      match_expressions {
+        key      = "app"
+        operator = "In"
+        values   = ["tasky-app"]
+      }
+    }
+
+    ingress {
+      ports {
+        port     = "http"
+        protocol = "TCP"
+      }
+    }
+
+    egress {
+      ports {
+        port     = "27017"
+        protocol = "TCP"
+      }
+
+    }
+
+    policy_types = ["Ingress", "Egress"]
+  }
+}
