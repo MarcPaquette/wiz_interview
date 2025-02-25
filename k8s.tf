@@ -87,6 +87,7 @@ resource "kubernetes_deployment_v1" "default" {
           }
         }
 
+        service_account_name =  "tasky-service"
         security_context {
           run_as_non_root = true
 
